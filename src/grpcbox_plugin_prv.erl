@@ -95,6 +95,7 @@ compile_pb(Filename, OutDir, BeamOutDir, GpbOpts) ->
     GeneratedPB = filename:join(OutDir, ModuleName ++ ".erl"),
     CompiledPB = filename:join(BeamOutDir, ModuleName ++ ".beam"),
     ok = filelib:ensure_dir(GeneratedPB),
+    ok = filelib:ensure_dir(CompiledPB),
     case needs_update(Filename, GeneratedPB) of
         true ->
             rebar_log:log(info, "Writing ~s", [GeneratedPB]),
