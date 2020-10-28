@@ -1,4 +1,4 @@
--module(grpcbox_plugin_prv).
+-module(grpc_plugin_prv).
 
 -export([init/1, do/1, format_error/1]).
 
@@ -167,12 +167,12 @@ filter_outdated({#{module_name := ModuleName}, TemplateSuffix, _}, OutDir, Proto
 templates(S) when is_list(S) ->
     templates(list_to_existing_atom(S));
 templates(all) ->
-    [{"client", "grpcbox_service_client"},
-     {"bhvr", "grpcbox_service_bhvr"}];
+    [{"client", "grpc_service_client"},
+     {"bhvr", "grpc_service_bhvr"}];
 templates(client) ->
-    [{"client", "grpcbox_service_client"}];
+    [{"client", "grpc_service_client"}];
 templates(server) ->
-    [{"bhvr", "grpcbox_service_bhvr"}].
+    [{"bhvr", "grpc_service_bhvr"}].
 
 normalize_method_opt({opts, _}) ->
     [];
