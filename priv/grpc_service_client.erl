@@ -12,16 +12,15 @@
 
 -include_lib("grpc/include/grpc.hrl").
 
--define(is_ctx(Ctx), is_tuple(Ctx) andalso element(1, Ctx) =:= ctx).
-
 -define(SERVICE, '{{unmodified_service_name}}').
 -define(PROTO_MODULE, '{{pb_module}}').
 -define(MARSHAL_FUN(T), fun(I) -> ?PROTO_MODULE:encode_msg(I, T) end).
 -define(UNMARSHAL_FUN(T), fun(I) -> ?PROTO_MODULE:decode_msg(I, T) end).
--define(DEF(Input, Output, MessageType), #grpc_def{service=?SERVICE,
-                                                      message_type=MessageType,
-                                                      marshal_fun=?MARSHAL_FUN(Input),
-                                                      unmarshal_fun=?UNMARSHAL_FUN(Output)}).
+-define(DEF(Input, Output, MessageType),
+        #{service => ?SERVICE,
+          message_type => MessageType,
+          marshal => ?MARSHAL_FUN(Input),
+          unmarshal => ?UNMARSHAL_FUN(Output)}).
 
 {{#methods}}
 %% @doc {{^input_stream}}{{^output_stream}}Unary RPC{{/output_stream}}{{/input_stream}}
