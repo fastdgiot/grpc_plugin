@@ -58,9 +58,9 @@
      | {error, term()}.
 
 {{method}}(Metadata, Options) ->
-    grpc_client:open_stream(?DEF(<<"/{{unmodified_service_name}}/{{unmodified_method}}">>,
-                                 {{input}}, {{output}}, <<"{{message_type}}">>),
-                            Metadata, Options).
+    grpc_client:open(?DEF(<<"/{{unmodified_service_name}}/{{unmodified_method}}">>,
+                          {{input}}, {{output}}, <<"{{message_type}}">>),
+                     Metadata, Options).
 {{/output_stream}}{{/input_stream}}
 {{#input_stream}}
 -spec {{method}}(grpc_client:options())
@@ -74,8 +74,8 @@
     -> {ok, grpc_client:grpcstream()}
      | {error, term()}.
 {{method}}(Metadata, Options) ->
-    grpc_client:open_stream(?DEF(<<"/{{unmodified_service_name}}/{{unmodified_method}}">>,
-                                 {{input}}, {{output}}, <<"{{message_type}}">>),
-                            Metadata, Options).
+    grpc_client:open(?DEF(<<"/{{unmodified_service_name}}/{{unmodified_method}}">>,
+                          {{input}}, {{output}}, <<"{{message_type}}">>),
+                     Metadata, Options).
 {{/input_stream}}
 {{/methods}}
