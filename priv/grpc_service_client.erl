@@ -24,8 +24,7 @@
           unmarshal => ?UNMARSHAL(Resp)}).
 
 {{#methods}}
-{{^input_stream}}{{^output_stream}}
--spec {{method}}({{pb_module}}:{{input}}())
+{{^input_stream}}{{^output_stream}}-spec {{method}}({{pb_module}}:{{input}}())
     -> {ok, {{pb_module}}:{{output}}(), grpc:metadata()}
      | {error, term()}.
 {{method}}(Req) ->
@@ -44,29 +43,10 @@
     grpc_client:unary(?DEF(<<"/{{unmodified_service_name}}/{{unmodified_method}}">>,
                            {{input}}, {{output}}, <<"{{message_type}}">>),
                       Req, Metadata, Options).
-{{/output_stream}}{{/input_stream}}
-{{^input_stream}}{{#output_stream}}
--spec {{method}}(grpc_client:options())
+
+{{/output_stream}}{{/input_stream}}{{^input_stream}}{{#output_stream}}-spec {{method}}(grpc_client:options())
     -> {ok, grpc_client:grpcstream()}
      | {error, term()}.
-
-{{method}}(Options) ->
-    {{method}}(#{}, Options).
-
--spec {{method}}(grpc:metadata(), grpc_client:options())
-    -> {ok, grpc_client:grpcstream()}
-     | {error, term()}.
-
-{{method}}(Metadata, Options) ->
-    grpc_client:open(?DEF(<<"/{{unmodified_service_name}}/{{unmodified_method}}">>,
-                          {{input}}, {{output}}, <<"{{message_type}}">>),
-                     Metadata, Options).
-{{/output_stream}}{{/input_stream}}
-{{#input_stream}}
--spec {{method}}(grpc_client:options())
-    -> {ok, grpc_client:grpcstream()}
-     | {error, term()}.
-
 {{method}}(Options) ->
     {{method}}(#{}, Options).
 
@@ -77,5 +57,20 @@
     grpc_client:open(?DEF(<<"/{{unmodified_service_name}}/{{unmodified_method}}">>,
                           {{input}}, {{output}}, <<"{{message_type}}">>),
                      Metadata, Options).
+
+{{/output_stream}}{{/input_stream}}{{#input_stream}}-spec {{method}}(grpc_client:options())
+    -> {ok, grpc_client:grpcstream()}
+     | {error, term()}.
+{{method}}(Options) ->
+    {{method}}(#{}, Options).
+
+-spec {{method}}(grpc:metadata(), grpc_client:options())
+    -> {ok, grpc_client:grpcstream()}
+     | {error, term()}.
+{{method}}(Metadata, Options) ->
+    grpc_client:open(?DEF(<<"/{{unmodified_service_name}}/{{unmodified_method}}">>,
+                          {{input}}, {{output}}, <<"{{message_type}}">>),
+                     Metadata, Options).
+
 {{/input_stream}}
 {{/methods}}
