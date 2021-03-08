@@ -27,7 +27,13 @@ init(State) ->
 
 -spec do(rebar_state:t()) -> {ok, rebar_state:t()} | {error, string()}.
 do(State) ->
-    Apps = rebar_state:project_apps(State),
+    %% XXX: How umbrella project works?
+    Apps = case rebar_state:current_app(State) of
+               undefined ->
+                   rebar_state:project_apps(State);
+               AppInfo ->
+                   [AppInfo]
+           end,
     {Options, _} = rebar_state:command_parsed_args(State),
     lists:foreach(fun(AppInfo) ->
         clean_app_pb_and_services(AppInfo, Options, State)

@@ -33,7 +33,13 @@ init(State) ->
 
 -spec do(rebar_state:t()) -> {ok, rebar_state:t()} | {error, string()}.
 do(State) ->
-    Apps = rebar_state:project_apps(State),
+    %% XXX: How umbrella project works?
+    Apps = case rebar_state:current_app(State) of
+               undefined ->
+                   rebar_state:project_apps(State);
+               AppInfo ->
+                   [AppInfo]
+           end,
     {Options, _} = rebar_state:command_parsed_args(State),
     lists:foreach(fun(AppInfo) ->
         handle_app(AppInfo, Options, State)
@@ -118,6 +124,8 @@ compile_pb(Filename, OutDir, BeamOutDir, GpbOpts) ->
                     erlang:error(?PRV_ERROR({gpb, Filename, Error}))
             end;
         false ->
+            rebar_api:debug("Already latest pb file: ~s, "
+                            "skip compiling it", [CompiledPB]),
             ok
     end,
     case needs_update(GeneratedPB, CompiledPB) of
@@ -136,8 +144,12 @@ compile_pb(Filename, OutDir, BeamOutDir, GpbOpts) ->
                     throw(?PRV_ERROR({compile_errors, Errors}))
             end;
         false ->
+            rebar_api:debug("Already latest compiled pb file: ~s, "
+                            "skip compiling it", [CompiledPB]),
             ok
     end,
+    %% Ensure load the latest beam
+    _ = code:purge(list_to_atom(ModuleName)),
     {module, Module} = code:load_abs(filename:join(BeamOutDir, ModuleName)),
     {Module, CompiledPB}.
 
